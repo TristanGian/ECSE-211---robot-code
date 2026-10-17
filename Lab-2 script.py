@@ -95,7 +95,7 @@ if __name__ == "__main__":
         while(theta < initial + turnAngle + DEGREE_TOLERANCE):
             update_odometer()
             time.sleep(0.01)
-        current_angle = turnAngle
+        current_angle = current_angle + turnAngle
         black_count = 1
         black_wait = BLACK_WAIT_TURN
         
