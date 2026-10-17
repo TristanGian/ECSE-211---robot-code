@@ -15,18 +15,18 @@ if __name__ == "__main__":
     track_width = 13.4
     sensor_offset = 7.5
     sensor_diff = 5
-    ev3arr = [46 + 15, 35 +15, 12 +15] #wood
-    nxtarr = [512 +15, 354 +15, 313 +15] # wood
+    ev3arr = [265, 132, 62] #wood
+    nxtarr = [244, 129, 103] # wood
     motor = Motor("A") #left
     motor2 = Motor("B") #right
     ev = EV3ColorSensor(4) #left
     nxt = NXTColorSensor(1) #right
-    DRIVE_SPEED = -180 * 1/2 #DPS
+    DRIVE_SPEED = -180 * 1/3 #DPS
     TURN_SPEED = 30 * 1 #DPS
-    CORRECTION_TURN_SPEED = -5 * 2
+    CORRECTION_TURN_SPEED = -5 * 3
     BLACK_WAIT = 15 #checks
-    EV3_TOLERANCE = 1.5
-    NXT_TOLERANCE = 0.9102
+    EV3_TOLERANCE = 0.90
+    NXT_TOLERANCE = 0.90
     DEGREE_TOLERANCE = 1.5 #degrees
     
     
@@ -128,7 +128,8 @@ if __name__ == "__main__":
             motor.set_dps(DRIVE_SPEED)
             motor2.set_dps(DRIVE_SPEED)
             black_count =1
-            
+        elif(nxt_res == 1 and ev3_res ==1):
+            black_count = 1
     def measureblack():
         global black_count
         if (0 < black_count < BLACK_WAIT):
