@@ -15,8 +15,8 @@ if __name__ == "__main__":
     track_width = 13.4
     sensor_offset = 7.5
     sensor_diff = 5
-    ev3arr = [265, 132, 62] #wood
-    nxtarr = [244, 129, 103] # wood
+    ev3arr = [254, 175, 71] #wood
+    nxtarr = [681, 525, 435] # wood
     motor = Motor("A") #left
     motor2 = Motor("B") #right
     ev = EV3ColorSensor(4) #left
@@ -24,10 +24,11 @@ if __name__ == "__main__":
     DRIVE_SPEED = -180 * 1/3 #DPS
     TURN_SPEED = 30 * 1 #DPS
     CORRECTION_TURN_SPEED = -5 * 3
-    BLACK_WAIT = 15 #checks
-    EV3_TOLERANCE = 0.90
-    NXT_TOLERANCE = 0.90
+    BLACK_WAIT = 100 #checks val * 0.01 sec
+    EV3_TOLERANCE = 0.75
+    NXT_TOLERANCE = 0.75
     DEGREE_TOLERANCE = 1.5 #degrees
+    current_angle = 0
     
     
     motor.reset_encoder()
@@ -63,24 +64,28 @@ if __name__ == "__main__":
                 update_odometer()
                 correction()
                 time.sleep(0.01)
+            current_angle = 90
         if 89 < theta <= 179:
             initial = y
             while(y < initial + d):
                 update_odometer()
                 correction()
                 time.sleep(0.01)
+            current_angle =180
         if 180 < theta <= 269:
             initial = x
             while(x > initial - d):
                 update_odometer()
                 correction()
                 time.sleep(0.01)
+            current_angle=270
         if 270 < theta <= 359:
             initial = y
             while(y > initial - d):
                 update_odometer()
                 correction()
                 time.sleep(0.01)
+            current_angle = 0
     
     def turn(turnAngle):
         initial = theta
@@ -105,6 +110,7 @@ if __name__ == "__main__":
             turn(90)
     def correction():
         global black_count
+        global theta
         ev3_res, nxt_res = measureblack()
         if(ev3_res != nxt_res and ev3_res ==1):
             black_m = 0
@@ -117,6 +123,7 @@ if __name__ == "__main__":
             motor.set_dps(DRIVE_SPEED)
             motor2.set_dps(DRIVE_SPEED)
             black_count = 1
+            theta = current_angle
         elif(ev3_res != nxt_res and nxt_res == 1):
             black_m = 0
             while black_m == 0 :
@@ -128,6 +135,7 @@ if __name__ == "__main__":
             motor.set_dps(DRIVE_SPEED)
             motor2.set_dps(DRIVE_SPEED)
             black_count =1
+            theta = current_angle
         elif(nxt_res == 1 and ev3_res ==1):
             black_count = 1
     def measureblack():
