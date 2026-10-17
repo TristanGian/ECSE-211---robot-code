@@ -27,6 +27,7 @@ if __name__ == "__main__":
     BLACK_WAIT = 15 #checks
     EV3_TOLERANCE = 1.5
     NXT_TOLERANCE = 0.9102
+    DEGREE_TOLERANCE = 1.5 #degrees
     
     
     motor.reset_encoder()
@@ -85,7 +86,7 @@ if __name__ == "__main__":
         initial = theta
         motor.set_dps(-TURN_SPEED)
         motor2.set_dps(TURN_SPEED)
-        while(theta < initial + turnAngle):
+        while(theta < initial + turnAngle + DEGREE_TOLERANCE):
             update_odometer()
             time.sleep(0.01)
     
