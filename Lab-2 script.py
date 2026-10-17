@@ -89,13 +89,16 @@ if __name__ == "__main__":
         global current_angle
         global black_count
         global black_wait
-        initial = theta
+        turned = 0
+        last = theta
         motor.set_dps(-TURN_SPEED)
         motor2.set_dps(TURN_SPEED)
-        while(theta < initial + turnAngle + DEGREE_TOLERANCE):
+        while(turned < turnAngle + DEGREE_TOLERANCE):
             update_odometer()
+            turned += (theta - last + 180) % 360 - 180
+            last = theta
             time.sleep(0.01)
-        current_angle = current_angle + turnAngle
+        current_angle = (current_angle + turnAngle) % 360
         black_count = 1
         black_wait = BLACK_WAIT_TURN
         
