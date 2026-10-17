@@ -5,7 +5,6 @@ import time
 if __name__ == "__main__":
     wait_ready_sensors()
     
-    black_wait = 15
     prev_dl = 0
     prev_dr = 0
     theta = 0
@@ -22,6 +21,13 @@ if __name__ == "__main__":
     motor2 = Motor("B") #right
     ev = EV3ColorSensor(4) #left
     nxt = NXTColorSensor(1) #right
+    DRIVE_SPEED = -180 * 1/2 #DPS
+    TURN_SPEED = 30 * 1 #DPS
+    CORRECTION_TURN_SPEED = -5 * 2
+    BLACK_WAIT = 15 #checks
+    EV3_TOLERANCE = 1.5
+    NXT_TOLERANCE = 0.9102
+    
     
     motor.reset_encoder()
     motor2.reset_encoder()
@@ -48,8 +54,8 @@ if __name__ == "__main__":
         print("the value of theta: ", theta )
     
     def move_forward(d):
-        motor.set_dps(-180 * 1/2)
-        motor2.set_dps(-180 * 1/2)
+        motor.set_dps(DRIVE_SPEED)
+        motor2.set_dps(DRIVE_SPEED)
         if 0 <= theta <= 89:
             initial = x
             while(x < initial + d):
@@ -77,8 +83,8 @@ if __name__ == "__main__":
     
     def turn(turnAngle):
         initial = theta
-        motor.set_dps(-30 * 1)
-        motor2.set_dps(30 * 1)
+        motor.set_dps(-TURN_SPEED)
+        motor2.set_dps(TURN_SPEED)
         while(theta < initial + turnAngle):
             update_odometer()
             time.sleep(0.01)
@@ -103,29 +109,31 @@ if __name__ == "__main__":
             black_m = 0
             while black_m == 0 :
                 motor.set_dps(0)
-                motor2.set_dps(-5 * 2)
+                motor2.set_dps(CORRECTION_TURN_SPEED)
                 blank,black_m =measureblack()
+                update_odometer()
                 time.sleep(0.01)
-            motor.set_dps(-180 * 1/2 )
-            motor2.set_dps(-180 * 1/2)
+            motor.set_dps(DRIVE_SPEED)
+            motor2.set_dps(DRIVE_SPEED)
             black_count = 1
         elif(ev3_res != nxt_res and nxt_res == 1):
             black_m = 0
             while black_m == 0 :
-                motor.set_dps(-5 * 2)
+                motor.set_dps(CORRECTION_TURN_SPEED)
                 motor2.set_dps(0)
                 black_m,blank =measureblack()
+                update_odometer()
                 time.sleep(0.01)
-            motor.set_dps(-180 * 1/2)
-            motor2.set_dps(-180 * 1/2)
+            motor.set_dps(DRIVE_SPEED)
+            motor2.set_dps(DRIVE_SPEED)
             black_count =1
             
     def measureblack():
         global black_count
-        if (0 < black_count < black_wait):
+        if (0 < black_count < BLACK_WAIT):
             black_count = black_count +1
             return (0,0)
-        elif (black_count > black_wait):
+        elif (black_count > BLACK_WAIT):
             black_count =0
         val1 = ev.get_rgb()
         val2 = nxt.get_rgb()
@@ -136,9 +144,9 @@ if __name__ == "__main__":
             val2[i] = val2[i]/nxtarr[i]
         for i in range(3):
             print(val2[i])
-            if val1[i] >= 1.5:
+            if val1[i] >= EV3_TOLERANCE:
                 flag1 = 0
-            if val2[i] >= 0.9102:
+            if val2[i] >= NXT_TOLERANCE:
                 flag2 = 0
         return (flag1, flag2)
     square_driver()
