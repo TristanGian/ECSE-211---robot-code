@@ -21,6 +21,7 @@ if __name__ == "__main__":
     NXT_TOLERANCE = 0.75
     DEGREE_TOLERANCE = 1.5 #degrees
     SQUARE_SIZE = 30.48 # cm
+    COORDINATES  = []
     current_angle = 0
     
     
@@ -30,7 +31,7 @@ if __name__ == "__main__":
     time.sleep(0.5)
     
     def update_odometer():
-        global prev_dl , prev_dr, theta, x, y, radius, track_width
+        global prev_dl , prev_dr, theta, x, y, radius, track_width, h
         dl = -1*motor.get_encoder()
         dr = -1*motor2.get_encoder()
         #print("dl: ",dl)
@@ -95,4 +96,7 @@ if __name__ == "__main__":
             prev = coordinates[i]  
         return arr
 
-    
+    instructions = calculateMoveArr(COORDINATES)
+    for i in range(instructions):
+        turn(instructions[i][1])
+        move_forward(instructions[i][0]) 
