@@ -152,4 +152,6 @@ if __name__ == "__main__":
             if val2[i] >= NXT_TOLERANCE:
                 flag2 = 0
         return (flag1, flag2)
-    
+
+
+    #NEED FUCNTION TO CONVERT X,Y POINTS INTO UP DOWN SO ITS JUST TURN AND DRIVE DISTANCE 
