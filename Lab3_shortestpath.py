@@ -17,8 +17,6 @@ if __name__ == "__main__":
     motor2 = Motor("B") #right
     DRIVE_SPEED = -180 * 1/3 #DPS
     TURN_SPEED = 30 * 1 #DPS
-    EV3_TOLERANCE = 0.75
-    NXT_TOLERANCE = 0.75
     DEGREE_TOLERANCE = 1.5 #degrees
     SQUARE_SIZE = 30.48 # cm
     COORDINATES  = []
